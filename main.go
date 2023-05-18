@@ -1,21 +1,25 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"math/rand"
-	"time"
+	"os"
+	"os/exec"
 )
 
 type State struct {
-	data [][]int
+	data   [][]int
+	size   int
+	height int
+	pos    []int
 }
 
 func new(arr []int) State {
-	return State{data: [][]int{arr}}
-}
-
-func max() int {
-	return (30 + 7) / 8
+	n := len(arr)
+	a := make([]int, n)
+	h := height(n)
+	return State{data: [][]int{a}, size: n, height: h}
 }
 
 func genRand(n int) []int {
@@ -26,24 +30,41 @@ func genRand(n int) []int {
 	return arr
 }
 
-func main() {
-	arr := genRand(30)
-	a := make([]int, 30)
-	copy(a, arr)
-	s := new(a)
-	s.InsertionSort(arr, 30)
-
-	fmt.Println(a)
-	for _, d := range s.data {
-		fmt.Println("\033[2J")
-		for i, n := range d {
-			p := convert(i, n)
-			for j := 0; j < max(); j++ {
-				draw(p, n, i, j)
-			}
-		}
-		time.Sleep(time.Millisecond * 10)
+func exit() {
+	reader := bufio.NewReader(os.Stdin)
+	s, _, _ := reader.ReadRune()
+	if s == LF {
+		os.Exit(0)
 	}
+}
+
+func clear() {
+	fmt.Fprintf(os.Stdout, "\033[2J")
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+}
+
+func main() {
+	n := 30
+	arr := genRand(n)
+	s := new(arr)
+	s.InsertionSort(arr)
+
+	go exit()
+	clear()
+	draw(s, n)
+	fmt.Fprintf(os.Stdout, "\033[%dB", s.height)
+	fmt.Println()
+
+	//fmt.Print("\x1b[36m" + "abc" + "\n")
+
+	//m := make([]byte, 0, 100)
+	//for i := 0; i < 10; i++ {
+	//	s := fmt.Sprintf("\x1b[%dm", i+26) + "あ" + "\n"
+	//	m = append(m, s...)
+	//}
+	//fmt.Println(string(m))
 }
 
 //for _, v := range new.data {
