@@ -7,52 +7,65 @@ import (
 )
 
 const (
-	B1    rune = 9600
-	B8    rune = 9608
-	EMPTY rune = 32
-	LF    rune = 10
+	B1      rune = 9600
+	B8      rune = 9608
+	EMPTY   rune = 32
+	LF      rune = 10
+	TARGET  rune = 36
+	DEFAULT rune = 39
 )
 
 type Buff struct {
-	s []rune
+	s []byte
 }
 
 func height(n int) int {
 	return (n + 7) / 8
 }
 
-func convert(i int, num int, h int) rune {
+func convert(s State, i int, t int, num int, target bool) string {
 	fraction := num % 8
 	full := num / 8
 
-	if i == h-full-1 && fraction != 0 {
-		return B1 + int32(fraction)
-	}
-	if h-full <= i {
-		return B8
+	var a string
+
+	if target && s.count != t {
+		a += fmt.Sprintf("\x1b[%dm", TARGET)
+	} else {
+		a += fmt.Sprintf("\x1b[%dm", DEFAULT)
 	}
 
-	return EMPTY
+	if i == s.height-full-1 && fraction != 0 {
+		a += string(B1 + int32(fraction))
+	} else if s.height-full <= i {
+		a += string(B8)
+	} else {
+		a += string(EMPTY)
+	}
+
+	return a
 }
 
-func (b *Buff) write(nums []int, pos []int, n int, i int, h int) {
-	for j := 0; j < n; j++ {
-		r := convert(i, nums[j], h)
-		b.s = append(b.s, r)
+func (b *Buff) write(s State, nums []int, t int, i int) {
+	for j := 0; j < s.size; j++ {
+		target := j == s.pos[t].a || j == s.pos[t].b
+		block := convert(s, i, t, nums[j], target)
+		b.s = append(b.s, block...)
 	}
-	b.s = append(b.s, LF)
+	b.s = append(b.s, string(LF)...)
 }
 
 func draw(s State, n int) {
-
-	for _, nums := range s.data {
-		b := make([]rune, 0, 110)
+	for t, nums := range s.data {
+		b := make([]byte, 0, 1000)
 		buff := Buff{s: b}
 		for i := 0; i < s.height; i++ {
-			buff.write(nums, s.pos, n, i, s.height)
+			buff.write(s, nums, t, i)
 		}
 		fmt.Fprintf(os.Stdout, "\r%s", string(buff.s))
-		time.Sleep(time.Millisecond * 5)
+		fmt.Printf("\x1b[%dm", DEFAULT)
+		fmt.Print("STEP: ", t)
+		time.Sleep(time.Millisecond * 50)
 		fmt.Fprintf(os.Stdout, "\033[%dA", s.height)
 	}
 }

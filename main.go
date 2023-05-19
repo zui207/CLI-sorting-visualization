@@ -9,17 +9,20 @@ import (
 )
 
 type State struct {
+	arr    []int
 	data   [][]int
+	pos    []Pair
 	size   int
 	height int
-	pos    []int
+	count  int
 }
 
 func new(arr []int) State {
 	n := len(arr)
 	a := make([]int, n)
 	h := height(n)
-	return State{data: [][]int{a}, size: n, height: h}
+	p := Pair{a: 0, b: 0}
+	return State{arr: arr, data: [][]int{a}, size: n, height: h, pos: []Pair{p}}
 }
 
 func genRand(n int) []int {
@@ -46,38 +49,17 @@ func clear() {
 }
 
 func main() {
-	n := 30
+	n := 50
 	arr := genRand(n)
+	fmt.Println(arr)
 	s := new(arr)
-	s.InsertionSort(arr)
+
+	//s.QuickSort()
+	s.InsertionSort()
 
 	go exit()
 	clear()
 	draw(s, n)
 	fmt.Fprintf(os.Stdout, "\033[%dB", s.height)
 	fmt.Println()
-
-	//fmt.Print("\x1b[36m" + "abc" + "\n")
-
-	//m := make([]byte, 0, 100)
-	//for i := 0; i < 10; i++ {
-	//	s := fmt.Sprintf("\x1b[%dm", i+26) + "あ" + "\n"
-	//	m = append(m, s...)
-	//}
-	//fmt.Println(string(m))
 }
-
-//for _, v := range new.data {
-//	fmt.Println(v)
-//}
-
-//fmt.Println("\033[2J")
-//for i := 1; i < 9; i++ {
-//	fmt.Printf("\033[10;%dH", i+i)
-//fmt.Print(rune('▅'))
-//}
-//fmt.Println("\n")
-//fmt.Printf("\033[%d;%dH", 0, 1)
-//fmt.Println(string(int32(9608)))
-//fmt.Printf("\033[%d;%dH", 2, 1)
-//fmt.Println(string(int32(9608)))
