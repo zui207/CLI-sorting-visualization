@@ -1,33 +1,36 @@
-package main
+package sorts
 
-import "reflect"
+import (
+	"reflect"
 
-type Pair struct {
-	a int
-	b int
+	"github.com/zui207/CLI-sorting-visualization/state"
+)
+
+type State struct {
+	*state.State
 }
 
 func (s *State) Sort() {
-	name := collections[s.id] + "Sort"
-	s.algo = name
+	name := state.Collections[s.Id] + "Sort"
+	s.Algo = name
 	reflect.ValueOf(s).MethodByName(name).Call([]reflect.Value{})
 }
 
 func (s *State) update(a int, b int) {
-	s.arr[a], s.arr[b] = s.arr[b], s.arr[a]
-	t := make([]int, s.size)
-	copy(t, s.arr)
-	s.data = append(s.data, t)
-	s.pos = append(s.pos, Pair{a: a, b: b})
-	s.count++
+	s.Arr[a], s.Arr[b] = s.Arr[b], s.Arr[a]
+	t := make([]int, s.Size)
+	copy(t, s.Arr)
+	s.Data = append(s.Data, t)
+	s.Pos = append(s.Pos, state.Pair{A: a, B: b})
+	s.Count++
 }
 
 func (s *State) InsertionSort() {
-	for i := 1; i < s.size; i++ {
-		k := s.arr[i]
+	for i := 1; i < s.Size; i++ {
+		k := s.Arr[i]
 		j := i - 1
 
-		for j >= 0 && s.arr[j] > k {
+		for j >= 0 && s.Arr[j] > k {
 			s.update(j, j+1)
 			j--
 		}
@@ -35,9 +38,9 @@ func (s *State) InsertionSort() {
 }
 
 func (s *State) BubbleSort() {
-	for i := 0; i < s.size-1; i++ {
-		for j := 0; j < s.size-i-1; j++ {
-			if s.arr[j] > s.arr[j+1] {
+	for i := 0; i < s.Size-1; i++ {
+		for j := 0; j < s.Size-i-1; j++ {
+			if s.Arr[j] > s.Arr[j+1] {
 				s.update(j, j+1)
 			}
 		}
@@ -45,10 +48,10 @@ func (s *State) BubbleSort() {
 }
 
 func (s *State) SelectionSort() {
-	for i := 0; i < s.size-1; i++ {
+	for i := 0; i < s.Size-1; i++ {
 		m := i
-		for j := i + 1; j < s.size; j++ {
-			if s.arr[m] > s.arr[j] {
+		for j := i + 1; j < s.Size; j++ {
+			if s.Arr[m] > s.Arr[j] {
 				m = j
 			}
 		}
@@ -59,7 +62,7 @@ func (s *State) SelectionSort() {
 }
 
 func (s *State) QuickSort() {
-	s._QuickSort(0, s.size-1)
+	s._QuickSort(0, s.Size-1)
 }
 
 func (s *State) _QuickSort(p int, r int) {
@@ -71,12 +74,12 @@ func (s *State) _QuickSort(p int, r int) {
 }
 
 func (s *State) partition(p int, r int) int {
-	k := pivot(s.arr, p, r)
-	x := s.arr[k]
+	k := pivot(s.Arr, p, r)
+	x := s.Arr[k]
 
 	i := p - 1
 	for j := p; j < r+1; j++ {
-		if s.arr[j] <= x {
+		if s.Arr[j] <= x {
 			i++
 			s.update(i, j)
 			if i == k {
