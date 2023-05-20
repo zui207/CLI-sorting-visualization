@@ -6,15 +6,35 @@ import (
 	"math/rand"
 	"os"
 	"os/exec"
+	"strconv"
+	"sync"
+	"time"
 )
 
 type State struct {
+	algo   string
+	id     int
 	arr    []int
 	data   [][]int
 	pos    []Pair
 	size   int
 	height int
 	count  int
+}
+
+func init() {
+	clear()
+	for i, s := range collections {
+		fmt.Printf("%d: %s\n", i, s)
+	}
+}
+
+func input() (int, error) {
+	fmt.Printf("Input 0 to %d: ", N-1)
+	reader := bufio.NewReader(os.Stdin)
+	l, _, _ := reader.ReadLine()
+	s := string(l)
+	return strconv.Atoi(s)
 }
 
 func new(arr []int) State {
@@ -26,6 +46,7 @@ func new(arr []int) State {
 }
 
 func genRand(n int) []int {
+	rand.Seed(time.Now().UnixNano())
 	arr := rand.Perm(n)
 	for i := 0; i < n; i++ {
 		arr[i]++
@@ -34,6 +55,7 @@ func genRand(n int) []int {
 }
 
 func exit() {
+	fmt.Println("Press Enter to Stop: ")
 	reader := bufio.NewReader(os.Stdin)
 	s, _, _ := reader.ReadRune()
 	if s == LF {
@@ -49,17 +71,23 @@ func clear() {
 }
 
 func main() {
-	n := 50
+	n := 100
 	arr := genRand(n)
-	fmt.Println(arr)
 	s := new(arr)
+	wg := sync.WaitGroup{}
 
-	//s.QuickSort()
-	s.InsertionSort()
+	if v, err := input(); err != nil || v > N-1 {
+		return
+	} else {
+		s.id = v
+		s.Sort()
+		go exit()
+		clear()
+		wg.Add(1)
+		go draw(s, n, &wg)
+		wg.Wait()
 
-	go exit()
-	clear()
-	draw(s, n)
-	fmt.Fprintf(os.Stdout, "\033[%dB", s.height)
-	fmt.Println()
+		fmt.Fprintf(os.Stdout, "\033[%dB", s.height+1)
+		fmt.Println()
+	}
 }

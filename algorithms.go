@@ -1,11 +1,19 @@
 package main
 
+import "reflect"
+
 type Pair struct {
 	a int
 	b int
 }
 
-func update(s *State, a int, b int) {
+func (s *State) Sort() {
+	name := collections[s.id] + "Sort"
+	s.algo = name
+	reflect.ValueOf(s).MethodByName(name).Call([]reflect.Value{})
+}
+
+func (s *State) update(a int, b int) {
 	s.arr[a], s.arr[b] = s.arr[b], s.arr[a]
 	t := make([]int, s.size)
 	copy(t, s.arr)
@@ -20,33 +28,57 @@ func (s *State) InsertionSort() {
 		j := i - 1
 
 		for j >= 0 && s.arr[j] > k {
-			update(s, j, j+1)
+			s.update(j, j+1)
 			j--
 		}
 	}
 }
 
-func (s *State) QuickSort() {
-	_QuickSort(s, 0, s.size-1)
+func (s *State) BubbleSort() {
+	for i := 0; i < s.size-1; i++ {
+		for j := 0; j < s.size-i-1; j++ {
+			if s.arr[j] > s.arr[j+1] {
+				s.update(j, j+1)
+			}
+		}
+	}
 }
 
-func _QuickSort(s *State, p int, r int) {
+func (s *State) SelectionSort() {
+	for i := 0; i < s.size-1; i++ {
+		m := i
+		for j := i + 1; j < s.size; j++ {
+			if s.arr[m] > s.arr[j] {
+				m = j
+			}
+		}
+		if m != i {
+			s.update(m, i)
+		}
+	}
+}
+
+func (s *State) QuickSort() {
+	s._QuickSort(0, s.size-1)
+}
+
+func (s *State) _QuickSort(p int, r int) {
 	if p < r {
 		q := s.partition(p, r)
-		_QuickSort(s, p, q-1)
-		_QuickSort(s, q+1, r)
+		s._QuickSort(p, q-1)
+		s._QuickSort(q+1, r)
 	}
 }
 
 func (s *State) partition(p int, r int) int {
-	k := pivot(s, p, r)
+	k := pivot(s.arr, p, r)
 	x := s.arr[k]
 
 	i := p - 1
 	for j := p; j < r+1; j++ {
 		if s.arr[j] <= x {
 			i++
-			update(s, i, j)
+			s.update(i, j)
 			if i == k {
 				k = j
 			} else if j == k {
@@ -54,14 +86,14 @@ func (s *State) partition(p int, r int) int {
 			}
 		}
 	}
-	update(s, i, k)
+	s.update(i, k)
 
 	return i
 }
 
-func pivot(s *State, p int, r int) int {
+func pivot(arr []int, p int, r int) int {
 	m := (p + r) / 2
-	a, b, c := s.arr[p], s.arr[m], s.arr[r]
+	a, b, c := arr[p], arr[m], arr[r]
 
 	if a >= b {
 		if b >= c {

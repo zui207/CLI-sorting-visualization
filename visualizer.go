@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"os"
+	"sync"
 	"time"
 )
 
+const N int = 4
 const (
 	B1      rune = 9600
 	B8      rune = 9608
@@ -14,6 +16,8 @@ const (
 	TARGET  rune = 36
 	DEFAULT rune = 39
 )
+
+var collections = []string{"Insertion", "Selection", "Bubble", "Quick"}
 
 type Buff struct {
 	s []byte
@@ -55,7 +59,7 @@ func (b *Buff) write(s State, nums []int, t int, i int) {
 	b.s = append(b.s, string(LF)...)
 }
 
-func draw(s State, n int) {
+func draw(s State, n int, wg *sync.WaitGroup) {
 	for t, nums := range s.data {
 		b := make([]byte, 0, 1000)
 		buff := Buff{s: b}
@@ -64,8 +68,10 @@ func draw(s State, n int) {
 		}
 		fmt.Fprintf(os.Stdout, "\r%s", string(buff.s))
 		fmt.Printf("\x1b[%dm", DEFAULT)
-		fmt.Print("STEP: ", t)
-		time.Sleep(time.Millisecond * 50)
-		fmt.Fprintf(os.Stdout, "\033[%dA", s.height)
+		fmt.Printf("%s | SWAP: %d | Press Enter to Exit: ", s.algo, t)
+		time.Sleep(time.Millisecond * 10)
+		fmt.Fprintf(os.Stdout, "\033[%dA", s.height+1)
 	}
+
+	wg.Done()
 }
