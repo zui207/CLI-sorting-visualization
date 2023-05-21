@@ -22,6 +22,10 @@ type Buff struct {
 	s []byte
 }
 
+func delay(n int) {
+	time.Sleep(time.Millisecond * 10)
+}
+
 func convert(s sorts.State, i int, t int, num int, target bool) string {
 	fraction := num % 8
 	full := num / 8
@@ -63,8 +67,8 @@ func Draw(s sorts.State, n int, wg *sync.WaitGroup) {
 		}
 		fmt.Fprintf(os.Stdout, "\r%s", string(buff.s))
 		fmt.Printf("\x1b[%dm", DEFAULT)
-		fmt.Printf("%s | SWAP: %d | Press Enter to Exit: ", s.Algo, t)
-		time.Sleep(time.Millisecond * 10)
+		fmt.Printf("%s | swap/murge: %d | Press Enter to Exit: ", s.Algo, t)
+		delay(60)
 		fmt.Fprintf(os.Stdout, "\033[%dA", s.Height+1)
 	}
 

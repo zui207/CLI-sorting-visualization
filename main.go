@@ -3,12 +3,10 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math/rand"
 	"os"
 	"os/exec"
 	"strconv"
 	"sync"
-	"time"
 
 	"github.com/zui207/CLI-sorting-visualization/sorts"
 	"github.com/zui207/CLI-sorting-visualization/state"
@@ -30,29 +28,11 @@ func input() (int, error) {
 	return strconv.Atoi(s)
 }
 
-func new(arr []int) sorts.State {
-	n := len(arr)
-	d := make([]int, n)
-	h := state.Height(n)
-	p := state.Pair{A: 0, B: 0}
-
-	return sorts.State{State: &state.State{Arr: arr, Data: [][]int{d}, Pos: []state.Pair{p}, Size: n, Height: h}}
-}
-
-func genRand(n int) []int {
-	rand.Seed(time.Now().UnixNano())
-	arr := rand.Perm(n)
-	for i := 0; i < n; i++ {
-		arr[i]++
-	}
-	return arr
-}
-
 func exit() {
-	fmt.Println("Press Enter to Stop: ")
+	fmt.Println("Press Any Key to Stop: ")
 	reader := bufio.NewReader(os.Stdin)
-	s, _, _ := reader.ReadRune()
-	if s == visualizer.LF {
+	_, _, err := reader.ReadLine()
+	if err == nil {
 		os.Exit(0)
 	}
 }
@@ -64,9 +44,18 @@ func clear() {
 	cmd.Run()
 }
 
+func new(arr []int) sorts.State {
+	n := len(arr)
+	d := make([]int, n)
+	h := state.Height(n)
+	p := state.Pair{A: 0, B: 0}
+
+	return sorts.State{State: &state.State{Arr: arr, Data: [][]int{d}, Pos: []state.Pair{p}, Size: n, Height: h}}
+}
+
 func main() {
 	n := 100
-	arr := genRand(n)
+	arr := state.GenRand(n)
 	s := new(arr)
 	wg := sync.WaitGroup{}
 	if v, err := input(); err != nil || v > state.N-1 {
@@ -76,6 +65,7 @@ func main() {
 		s.Sort()
 		go exit()
 		clear()
+
 		wg.Add(1)
 		go visualizer.Draw(s, n, &wg)
 		wg.Wait()

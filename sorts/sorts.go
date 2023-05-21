@@ -1,6 +1,7 @@
 package sorts
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/zui207/CLI-sorting-visualization/state"
@@ -25,6 +26,26 @@ func (s *State) update(a int, b int) {
 	s.Count++
 }
 
+func (s *State) mergeUpdate(a int, b int, l []int, r []int) {
+	i, j := 0, 0
+	for k := a; k < b; k++ {
+		if l[i] <= r[j] {
+			s.Arr[k] = l[i]
+			s.Pos = append(s.Pos, state.Pair{A: k, B: i})
+			i++
+		} else {
+			s.Arr[k] = r[j]
+			s.Pos = append(s.Pos, state.Pair{A: k, B: j})
+			j++
+		}
+		t := make([]int, s.Size)
+		copy(t, s.Arr)
+		s.Data = append(s.Data, t)
+		s.Count++
+	}
+}
+
+// insertionsort
 func (s *State) InsertionSort() {
 	for i := 1; i < s.Size; i++ {
 		k := s.Arr[i]
@@ -37,6 +58,7 @@ func (s *State) InsertionSort() {
 	}
 }
 
+// bubblesort
 func (s *State) BubbleSort() {
 	for i := 0; i < s.Size-1; i++ {
 		for j := 0; j < s.Size-i-1; j++ {
@@ -47,6 +69,7 @@ func (s *State) BubbleSort() {
 	}
 }
 
+// selectionsort
 func (s *State) SelectionSort() {
 	for i := 0; i < s.Size-1; i++ {
 		m := i
@@ -61,6 +84,7 @@ func (s *State) SelectionSort() {
 	}
 }
 
+// quicksort
 func (s *State) QuickSort() {
 	s._QuickSort(0, s.Size-1)
 }
@@ -116,4 +140,36 @@ func pivot(arr []int, p int, r int) int {
 		}
 	}
 
+}
+
+// mergesort
+func (s *State) MergeSort() {
+	s._MergeSort(0, s.Size)
+}
+
+func (s *State) merge(left int, mid int, right int) {
+	n1 := mid - left
+	n2 := right - mid
+	l := make([]int, n1+1)
+	r := make([]int, n2+1)
+	l[n1] = s.Size + 1
+	r[n2] = s.Size + 1
+	for i := 0; i < n1; i++ {
+		l[i] = s.Arr[left+i]
+	}
+	for i := 0; i < n2; i++ {
+		r[i] = s.Arr[mid+i]
+	}
+	s.mergeUpdate(left, right, l, r)
+
+}
+
+func (s *State) _MergeSort(left int, right int) {
+	if right-left > 1 {
+		mid := (left + right) / 2
+		s._MergeSort(left, mid)
+		s._MergeSort(mid, right)
+		s.merge(left, mid, right)
+		fmt.Println(s.Arr, left, mid, right)
+	}
 }

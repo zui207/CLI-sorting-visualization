@@ -1,8 +1,13 @@
 package state
 
-var Collections = []string{"Insertion", "Selection", "Bubble", "Quick"}
+import (
+	"math/rand"
+	"time"
+)
 
-const N int = 4
+var Collections = []string{"Insertion", "Selection", "Bubble", "Merge", "Quick"}
+
+const N int = 5
 
 type State struct {
 	Algo   string
@@ -22,4 +27,13 @@ type Pair struct {
 
 func Height(n int) int {
 	return (n + 7) / 8
+}
+
+func GenRand(n int) []int {
+	rand.Seed(time.Now().UnixNano())
+	arr := rand.Perm(n)
+	for i := 0; i < n; i++ {
+		arr[i]++
+	}
+	return arr
 }
