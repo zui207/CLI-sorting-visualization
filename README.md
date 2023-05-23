@@ -4,4 +4,4 @@ It works with bash on Ubuntu 20.04 LTS at least.
 
 ## Usage
 - Clone GitHub repository `git clone https://github.com/zui207/CLI-sorting-visualization.git`
-- Run './CLI-sorting-visualization'
+- Run `./CLI-sorting-visualization`
