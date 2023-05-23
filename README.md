@@ -2,6 +2,14 @@
 This is terminal-based sort algorithm visualizer. This code contains ANSI escape sequences, so it may not work properly in your OS or devices.
 It works with bash on Ubuntu 20.04 LTS at least.
 
+| | |
+|:-------------------------:|:-------------------------:|
+![demo](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/demo.gif)
+|![bubble](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/bubble.gif)|![selection](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/selection.gif)
+|![insertion](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/insertion.gif)|![merge](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/merge.gif)
+![quick](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/quick.gif)
+| | |
+
 ## Usage
 - Clone GitHub repository `git clone https://github.com/zui207/CLI-sorting-visualization.git`
 - Run `./CLI-sorting-visualization`
