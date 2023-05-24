@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/zui207/CLI-sorting-visualization/sorts"
@@ -18,6 +19,14 @@ func init() {
 	for i, s := range state.Collections {
 		fmt.Printf("%d: %s\n", i, s)
 	}
+}
+
+func setNum() int {
+	cmd := exec.Command("tput", "cols")
+	cmd.Stdin = os.Stdin
+	out, _ := cmd.Output()
+	n, _ := strconv.Atoi(strings.Trim(string(out), "\n"))
+	return n
 }
 
 func input() (int, error) {
@@ -54,7 +63,7 @@ func new(arr []int) sorts.State {
 }
 
 func main() {
-	n := 100
+	n := setNum()
 	arr := state.GenRand(n)
 	s := new(arr)
 	wg := sync.WaitGroup{}
@@ -63,7 +72,6 @@ func main() {
 	} else {
 		s.Id = v
 		s.Sort()
-
 		go exit()
 		clear()
 

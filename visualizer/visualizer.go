@@ -67,7 +67,7 @@ func Draw(s sorts.State, n int, wg *sync.WaitGroup) {
 		}
 		fmt.Fprintf(os.Stdout, "\r%s", string(buff.s))
 		fmt.Printf("\x1b[%dm", DEFAULT)
-		fmt.Printf("%s | swap/merge: %d | Press Enter to Exit: ", s.Algo, t)
+		fmt.Printf("%s | size: %d | swap/merge: %d | Press Enter to Exit: ", s.Algo, s.Size, t)
 		delay(60)
 		fmt.Fprintf(os.Stdout, "\033[%dA", s.Height+1)
 	}
