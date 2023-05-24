@@ -11,8 +11,8 @@ It works with bash on Ubuntu 20.04 LTS at least.
 |Bubble sort|Selection sort|
 |![insertion](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/insertion.gif)|![merge](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/merge.gif)|
 |Insertion sort|Merge sort|
-|![quick](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/quick.gif)
-|Quick sort|
+|![quick](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/quick.gif)|![heap](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/heap.gif)|
+|Quick sort|Heap sort|
 
 
 ## Usage
