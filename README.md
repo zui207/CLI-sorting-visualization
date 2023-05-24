@@ -14,6 +14,9 @@ It works with bash on Ubuntu 20.04 LTS at least.
 |![quick](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/quick.gif)|![heap](https://github.com/zui207/CLI-sorting-visualization/blob/main/demo/heap.gif)|
 |Quick sort|Heap sort|
 
+ It generates a sequence of random numbers between 1 and N.
+ N depends on the width of the terminal.
+ 
 
 ## Usage
 - Clone GitHub repository `git clone https://github.com/zui207/CLI-sorting-visualization.git`
