@@ -1,7 +1,6 @@
 package sorts
 
 import (
-	"fmt"
 	"reflect"
 
 	"github.com/zui207/CLI-sorting-visualization/state"
@@ -170,6 +169,45 @@ func (s *State) _MergeSort(left int, right int) {
 		s._MergeSort(left, mid)
 		s._MergeSort(mid, right)
 		s.merge(left, mid, right)
-		fmt.Println(s.Arr, left, mid, right)
+	}
+}
+
+func left(i int) int {
+	return 2*i + 1
+}
+
+func right(i int) int {
+	return 2*i + 2
+}
+
+func (s *State) HeapSort() {
+	for i := s.Size; i > 1; i-- {
+		s.buildMaxHeap(i)
+		s.update(0, i-1) //s.Arr[0], s.Arr[i-1] = s.Arr[i-1], s.Arr[0] // swap
+	}
+}
+
+func (s *State) buildMaxHeap(h int) {
+	for i := (h - 2) / 2; i >= 0; i-- {
+		s.maxHeapify(h, i)
+	}
+}
+
+func (s *State) maxHeapify(h int, i int) {
+	l := left(i)
+	r := right(i)
+	var largest int
+	if l < h && s.Arr[l] > s.Arr[i] {
+		largest = l
+	} else {
+		largest = i
+	}
+	if r < h && s.Arr[r] > s.Arr[largest] {
+		largest = r
+	}
+
+	if largest != i {
+		s.update(i, largest) //s.Arr[i], s.Arr[largest] = s.Arr[largest], s.Arr[i] // swap
+		s.maxHeapify(h, largest)
 	}
 }

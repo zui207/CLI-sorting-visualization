@@ -63,6 +63,7 @@ func main() {
 	} else {
 		s.Id = v
 		s.Sort()
+
 		go exit()
 		clear()
 

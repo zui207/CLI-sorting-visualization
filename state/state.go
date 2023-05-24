@@ -5,9 +5,9 @@ import (
 	"time"
 )
 
-var Collections = []string{"Insertion", "Selection", "Bubble", "Merge", "Quick"}
+var Collections = []string{"Insertion", "Selection", "Bubble", "Merge", "Quick", "Heap"}
 
-const N int = 5
+const N int = 6
 
 type State struct {
 	Algo   string
