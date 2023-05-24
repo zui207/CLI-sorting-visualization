@@ -80,6 +80,6 @@ func main() {
 		wg.Wait()
 
 		fmt.Fprintf(os.Stdout, "\033[%dB", s.Height+1)
-		fmt.Println()
+		fmt.Fprintln(os.Stdout, "\x1b[?25h")
 	}
 }
